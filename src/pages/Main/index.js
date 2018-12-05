@@ -26,15 +26,14 @@ export default class Main extends Component {
         loading: false,
         repositoryInput: "",
         repositories: [...this.state.repositories, repository],
-        repositoryError: false,
-        nameRepository: [
-          ...this.state.nameRepository,
-          `${this.state.repositoryInput}`
-        ]
+        repositoryError: false
       });
-      localStorage.setItem("@repositoriogit", this.state.repositories);
+      localStorage.setItem(
+        "@repositoriogit",
+        JSON.stringify(this.state.repositories)
+      );
 
-      console.log(localStorage.getItem("@repositoriogit"));
+      console.log(JSON.parse(localStorage.getItem("@repositoriogit")));
     } catch (err) {
       this.setState({
         repositoryError: true
@@ -45,13 +44,12 @@ export default class Main extends Component {
   };
 
   componentDidMount() {
-    const repositorioGit = localStorage.getItem("@repositoriogit");
-    console.log(repositorioGit);
-    if (repositorioGit.length) {
-      return;
-    }
+    //window.localStorage.removeItem("@repositoriogit");
+    const obj = JSON.parse(localStorage.getItem("@repositoriogit"));
+    console.log(obj);
+
     this.setState({
-      repositories: [...this.state.repositories, repositorioGit]
+      repositories: obj
     });
   }
 
