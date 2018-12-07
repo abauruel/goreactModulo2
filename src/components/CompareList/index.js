@@ -2,10 +2,22 @@ import React from "react";
 import { Container, Repository } from "./styles";
 import propTypes from "prop-types";
 
-const CompareList = ({ repositories }) => (
+const CompareList = ({ repositories, remover }) => (
   <Container>
     {repositories.map(repository => (
       <Repository key={repository.id}>
+        <label>
+          <button type="submit">
+            <i className="fa fa-refresh" />
+          </button>
+          <button
+            type="submit"
+            id={repository.id}
+            onClick={() => remover(repository.id)}
+          >
+            <i className="fa fa-times" />
+          </button>
+        </label>
         <header>
           <img src={repository.owner.avatar_url} alt={repository.owner.login} />
           <strong>{repository.name}</strong>

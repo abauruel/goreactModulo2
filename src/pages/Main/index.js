@@ -53,6 +53,18 @@ export default class Main extends Component {
     });
   }
 
+  handleOnClick = id => {
+    console.log(id);
+    const { repositories } = this.state;
+    const resp = repositories.filter(n => n.id !== id);
+    this.setState({
+      repositories: resp
+    });
+    localStorage.removeItem("@repositoriogit");
+    localStorage.setItem("@repositoriogit", JSON.stringify(repositories));
+
+    console.log(resp);
+  };
   render() {
     return (
       <Container>
@@ -76,7 +88,10 @@ export default class Main extends Component {
             )}
           </button>
         </Form>
-        <CompareList repositories={this.state.repositories} />
+        <CompareList
+          repositories={this.state.repositories}
+          remover={this.handleOnClick}
+        />
       </Container>
     );
   }

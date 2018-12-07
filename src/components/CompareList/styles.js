@@ -15,6 +15,7 @@ export const Repository = styled.div`
   display: flex;
   flex-direction: column;
   margin: 0 10px;
+  border-color: #0000ff;
   header {
     padding: 30px;
     display: flex;
@@ -34,8 +35,28 @@ export const Repository = styled.div`
     }
   }
 
+  label {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-end;
+    margin: -10px;
+
+    button {
+      margin: 5px;
+      background: #ffffff;
+      border-radius: 50%;
+      border: 0;
+      padding: 2px 5px;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
   ul {
     list-style: none;
+
     li {
       font-weight: bold;
       padding: 10px 20px;
