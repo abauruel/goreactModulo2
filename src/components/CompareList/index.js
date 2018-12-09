@@ -1,13 +1,13 @@
 import React from "react";
 import { Container, Repository } from "./styles";
-import propTypes from "prop-types";
+import PropTypes from "prop-types";
 
-const CompareList = ({ repositories, remover }) => (
+const CompareList = ({ repositories, remover, atualizar }) => (
   <Container>
     {repositories.map(repository => (
       <Repository key={repository.id}>
         <label>
-          <button type="submit">
+          <button type="submit" onClick={() => atualizar(repository.full_name)}>
             <i className="fa fa-refresh" />
           </button>
           <button
@@ -46,20 +46,19 @@ const CompareList = ({ repositories, remover }) => (
     ))}
   </Container>
 );
-
 CompareList.propTypes = {
-  repositories: propTypes.arrayOf(
-    propTypes.shape({
-      id: propTypes.number,
-      name: propTypes.string,
-      owner: propTypes.shape({
-        login: propTypes.string,
-        avatar_url: propTypes.string
+  repositories: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string,
+      owner: PropTypes.shape({
+        avatar_url: PropTypes.string,
+        login: PropTypes.string
       }),
-      stargazers_count: propTypes.number,
-      forks_count: propTypes.number,
-      open_issues_count: propTypes.number,
-      lastCommit: propTypes.string
+      stargazers_count: PropTypes.number,
+      forks_count: PropTypes.number,
+      open_issues_count: PropTypes.number,
+      lastCommit: PropTypes.string
     })
   ).isRequired
 };

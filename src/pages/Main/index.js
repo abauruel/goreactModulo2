@@ -47,23 +47,53 @@ export default class Main extends Component {
     //window.localStorage.removeItem("@repositoriogit");
     const obj = JSON.parse(localStorage.getItem("@repositoriogit"));
     console.log(obj);
-
+    if (!obj) {
+      return;
+    }
     this.setState({
       repositories: obj
     });
   }
-
-  handleOnClick = id => {
-    console.log(id);
+  handleRefresh = async full_name => {
     const { repositories } = this.state;
-    const resp = repositories.filter(n => n.id !== id);
-    this.setState({
-      repositories: resp
+    console.log(repositories.length);
+    const elem = repositories.filter(function(n) {
+      return n.full_name !== full_name;
     });
-    localStorage.removeItem("@repositoriogit");
-    localStorage.setItem("@repositoriogit", JSON.stringify(repositories));
+    this.setState({
+      repositories: elem
+    });
+    try {
+      const { data: repository } = await api.get(`/repos/${full_name}`);
+      repository.lastCommit = moment(repository.pushed_at).fromNow();
+      this.setState({
+        repositories: [...this.state.repositories, repository]
+      });
+      localStorage.removeItem("@repositoriogit");
+      localStorage.setItem(
+        "@repositoriogit",
+        JSON.stringify(this.state.repositories)
+      );
+    } catch (error) {
+      this.setState({
+        repositoryError: true
+      });
+    }
+  };
+  handleOnClick = async id => {
+    const { repositories } = this.state;
 
-    console.log(resp);
+    const resp = await repositories.filter(function(n) {
+      return n.id !== id;
+    });
+
+    console.log("antes: " + repositories.length);
+    this.setState({
+      repositories: [...resp]
+    });
+    console.log("depois: " + this.state.repositories.length);
+    localStorage.removeItem("@repositoriogit");
+    localStorage.setItem("@repositoriogit", JSON.stringify(resp));
   };
   render() {
     return (
@@ -91,6 +121,7 @@ export default class Main extends Component {
         <CompareList
           repositories={this.state.repositories}
           remover={this.handleOnClick}
+          atualizar={this.handleRefresh}
         />
       </Container>
     );
